@@ -7,6 +7,7 @@ class Project_Board extends React.Component{
       super(props);
       this.state = {
          projects: Array(1),
+
          newProjectID: 0 //keeps track of array index to add into
       }
    }
@@ -21,6 +22,13 @@ class Project_Board extends React.Component{
             <p className="underConstruction" >
             This page is under construction...
             </p>
+            
+               <Project 
+                  id ={5} //apparently numbers need to be in {}
+                  name = "test project"
+                  description = "test description"
+               />
+
             <nav>
                <li>
                   <Link to ="/"> Home </Link>
