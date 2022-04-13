@@ -14,6 +14,11 @@ class Project_Board extends React.Component{
 
 
    render(){
+
+      const id_input = '0'; //default is to access project 0, but user should input anyway
+      const name_input = "";
+      const description_input = "";
+
       return (
          <div>
             <h1> Projects </h1>
@@ -22,12 +27,27 @@ class Project_Board extends React.Component{
             <p className="underConstruction" >
             This page is under construction...
             </p>
+
+            <form>
+               <label> 
+                  Enter a project name:
+                  <input type = "text" placeholder = "Enter a name" />
+               </label>
+               <label>
+                  Enter a project ID: 
+                  <input type = "text" placeholder = "Enter an ID" />
+               </label>
+               <label>
+                  Enter a project description:
+                  <input type = "text" placeholder = "Enter a description"/>
+               </label>
+           </form>
             
-               <Project 
-                  id ={5} //apparently numbers need to be in {}
-                  name = "test project"
-                  description = "test description"
-               />
+            <Project 
+               id ={5} //apparently numbers need to be in {}
+               name = "test project"
+               description = "test description"
+            />
 
             <nav>
                <li>
