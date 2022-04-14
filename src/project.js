@@ -1,65 +1,59 @@
-import React from "react";
+import React, {useRef} from "react";
 import {Link} from "react-router-dom";
-import ConstructionIcon from '@mui/icons-material/Construction';
-
-class Project_Board extends React.Component{
-   constructor(props){
-      super(props);
-      this.state = {
-         projects: Array(1),
-
-         newProjectID: 0 //keeps track of array index to add into
-      }
-   }
 
 
-   render(){
+function Project_Board(){
 
-      const id_input = '0'; //default is to access project 0, but user should input anyway
-      const name_input = "";
-      const description_input = "";
+   const name = useRef();
+   const description = useRef();
+   const id = useRef();
 
-      return (
-         <div>
-            <h1> Projects </h1>
-            <p> This is the project page </p>
-            <ConstructionIcon sx={{ fontSize: 50 }}/>
-            <p className="underConstruction" >
-            This page is under construction...
-            </p>
 
-            <form>
-               <label> 
-                  Enter a project name:
-                  <input type = "text" placeholder = "Enter a name" />
-               </label>
-               <label>
-                  Enter a project ID: 
-                  <input type = "text" placeholder = "Enter an ID" />
-               </label>
-               <label>
-                  Enter a project description:
-                  <input type = "text" placeholder = "Enter a description"/>
-               </label>
-           </form>
-            
-            <Project 
-               id ={5} //apparently numbers need to be in {}
-               name = "test project"
-               description = "test description"
-            />
+   return (
+      <>
+         <br></br>
+         <br></br>
 
-            <nav>
-               <li>
-                  <Link to ="/"> Home </Link>
-               </li>
-               <li>
-                  <Link to = "/hardware"> Hardware </Link>
-               </li>
-            </nav>
-         </div>
-      );
-   }
+          <form>
+            <label> 
+               Enter a project name: 
+               <input 
+                  ref = {name}
+                  type = "text" placeholder = "Enter a name" 
+               />
+            </label>
+         <br></br>
+            <label>
+               Enter a project ID: 
+               <input 
+                  ref = {id}
+                  type = "text" placeholder = "Enter a project ID" 
+               />
+            </label>
+         <br></br>
+            <label>
+               Enter a project description:
+               <input 
+                  ref = {description}
+                  type = "text" placeholder = "Enter a project description" 
+               />
+            </label>
+         </form> 
+
+         
+         <button onClick = {() => this.renderProject()}> Enter </button>
+
+         <nav>
+            <li>
+               <Link to ="/"> Home </Link>
+            </li>
+            <li>
+               <Link to = "/hardware"> Hardware </Link>
+            </li>
+         </nav>
+
+      </>
+   )
 }
 
 export default Project_Board;
@@ -89,6 +83,3 @@ class Project extends React.Component{
       );
    }
 }
-
-
-
