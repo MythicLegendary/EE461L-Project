@@ -11,7 +11,7 @@ import os
 import json
 
 # Change static_folder when not testing
-app = Flask(__name__, static_folder='./flask-tester-app/build/', static_url_path='/')
+app = Flask(__name__, static_folder='./build/', static_url_path='/')
 db = Database.DatabaseImpl()
 #verifies that the username and password are valid, retrieved from the request form. If successful returns 0.
 @app.route("/")
