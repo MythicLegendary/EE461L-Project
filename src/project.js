@@ -5,27 +5,55 @@ import {Link} from "react-router-dom";
 
 function Project_Board(){
 
-   const [currentID, setID] = useState(0); //initial project is ID 0
-   const [name, setName] = useState("")
-   const [description, setDescription] = useState("")
+   const [project_id, setID] = useState(0); //initial project is ID 0
+   const [project_name, setName] = useState("")
+   const [project_description, setDescription] = useState("")
+   const [serverResponse, setServerResponse] = useState("No reponse yet");
+   //to get user input from uncontrolled input fields
    const name_field = useRef();
    const description_field = useRef();
    const id_field = useRef();
 
-   const project_props = {name: name_field, description: description_field, id: id_field};
 
-   function display_props(){
+   async function createProject(){
       console.log("in display_props")
-      let name = name_field.current.value
-      let id = id_field.current.value
-      let description = description_field.current.value
-      setID(id);
-      setName(name_field.current.value)
-      setDescription(description_field.current.value)
+
+      let createProjectName = name_field.current.value;
+      let createProjectID = id_field.current.value;
+      let createProjectDescription =description_field.current.value;
+
+      console.log("name " + {createProjectName});
+      console.log("projectid: " + {createProjectID});
+      console.log("project description: "+{createProjectDescription});
+
+      let postDict = {
+         method: "POST",
+         body: JSON.stringify({
+            name: createProjectName,
+            projectid: createProjectID,
+            description: createProjectDescription 
+         })
+      };
+
+      console.log("posted data")
+
+      let response = await fetch("/createProject", postDict);
+      let responseJson = await response.json();
+
+      console.log("received server response")
+
+      if (responseJson["errorcode"] ==0){
+         setServerResponse("Successfully created new project");
+      }
+      else {
+         setServerResponse("Error: new project not created");
+      }
+
+      console.log(serverResponse)
+      console.log(responseJson)
       
    }
 
-   const string = "it didn't work";
 
    return (
       <>
@@ -58,10 +86,11 @@ function Project_Board(){
             </label>
          </form> 
 
-         <button onClick = {() => display_props()}> Enter </button>
-         <p> This is the test string: {currentID} </p>
-         <p> New description: {description} </p>
-         <p> New ID: {currentID} </p>
+         <button onClick = {() => createProject()}> Create new project </button>
+         <p> New name: {project_name} </p>
+         <p> New description: {project_description} </p>
+         <p> New ID: {project_id} </p>
+
 
          <nav>
             <li>
@@ -86,8 +115,8 @@ class Project extends React.Component{
          availableHardwareUnits: 50
       };
    }
-
-
+//renders an instance of the Project class
+//         <Project id = {project_id} name={project_name} description={project_description} />
    render(){
 
       const id = this.props.id;
