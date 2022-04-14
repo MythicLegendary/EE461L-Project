@@ -4,6 +4,7 @@ import './App.css'
 import Hardware from "./hardware";
 import Project from "./project";
 import LoginPortal from "./LoginPortal";
+import CreateAccount from "./CreateAccount";
 
 export default function App() {
      return (
@@ -13,6 +14,7 @@ export default function App() {
                      <Route exact path = "/login" element = {<LoginPortal/>} />
                      <Route path = "Hardware" element ={<Hardware />} />
                      <Route path = "Project" element = {<Project/>} />
+                     <Route path = "/createaccount" element = {<CreateAccount/>} />
                   </Routes>
                </div>
 
@@ -33,7 +35,10 @@ function Home() {
             <Link to = "/project"> Projects </Link>
          </li>
          <li>
-            <Link to ="/login"> LoginPortal </Link>
+            <Link to ="/login"> Login Portal </Link>
+         </li>
+         <li>
+            <Link to ="/createaccount"> Create Account </Link>
          </li>
       </nav>
       </>
