@@ -19,10 +19,7 @@ function LoginPortal() {
     let password = details[Object.keys(details)[1]]
     console.log(username)
     console.log(password)
-
-
-
-
+    
     // Fetch protocol
     let dict = {
       method: "POST",
