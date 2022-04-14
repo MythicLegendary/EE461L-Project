@@ -1,13 +1,31 @@
 import React, {useRef} from "react";
+import { useState } from "react";
 import {Link} from "react-router-dom";
 
 
 function Project_Board(){
 
-   const name = useRef();
-   const description = useRef();
-   const id = useRef();
+   const [currentID, setID] = useState(0); //initial project is ID 0
+   const [name, setName] = useState("")
+   const [description, setDescription] = useState("")
+   const name_field = useRef();
+   const description_field = useRef();
+   const id_field = useRef();
 
+   const project_props = {name: name_field, description: description_field, id: id_field};
+
+   function display_props(){
+      console.log("in display_props")
+      let name = name_field.current.value
+      let id = id_field.current.value
+      let description = description_field.current.value
+      setID(id);
+      setName(name_field.current.value)
+      setDescription(description_field.current.value)
+      
+   }
+
+   const string = "it didn't work";
 
    return (
       <>
@@ -18,7 +36,7 @@ function Project_Board(){
             <label> 
                Enter a project name: 
                <input 
-                  ref = {name}
+                  ref = {name_field}
                   type = "text" placeholder = "Enter a name" 
                />
             </label>
@@ -26,7 +44,7 @@ function Project_Board(){
             <label>
                Enter a project ID: 
                <input 
-                  ref = {id}
+                  ref = {id_field}
                   type = "text" placeholder = "Enter a project ID" 
                />
             </label>
@@ -34,14 +52,16 @@ function Project_Board(){
             <label>
                Enter a project description:
                <input 
-                  ref = {description}
+                  ref = {description_field}
                   type = "text" placeholder = "Enter a project description" 
                />
             </label>
          </form> 
 
-         
-         <button onClick = {() => this.renderProject()}> Enter </button>
+         <button onClick = {() => display_props()}> Enter </button>
+         <p> This is the test string: {currentID} </p>
+         <p> New description: {description} </p>
+         <p> New ID: {currentID} </p>
 
          <nav>
             <li>
@@ -57,6 +77,7 @@ function Project_Board(){
 }
 
 export default Project_Board;
+
 
 class Project extends React.Component{
    constructor(props){
