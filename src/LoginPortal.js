@@ -1,6 +1,10 @@
 import { Home } from '@mui/icons-material';
 import React, { useState } from 'react';
 import LoginForm from './components/LoginForm';
+import Logged from './Logged';
+import HomeScreen from './HomeScreen'
+import {Link} from "react-router-dom";
+
 
 function LoginPortal() {
 
@@ -39,7 +43,11 @@ function LoginPortal() {
         name: username,
         password: password
       });
+      Logged.value = 1;
+      Logged.userName = username;
+      Logged.password = password;
       setServerResponse("User was verified");
+      
     } else {
       console.log("Details do not match")
       setError("Details do not match")
@@ -52,6 +60,7 @@ function LoginPortal() {
 
   const Logout = () => {
     setUser({ name: "", password: "" });
+    Logged.value = 0;
   }
 
 
@@ -60,8 +69,8 @@ function LoginPortal() {
     <div className="LoginPortal">
       {(user.password != "") ? (
         <div className="welcome">
-          <h2>Welcome, <span>{user.name}</span></h2>
-          <button onClick={Logout}>Logout</button>
+          <h1>Welcome, {Logged.userName}!</h1>
+          <Link to = "/"> Home </Link>  
         </div>
       ) : (
         <LoginForm Login={Login} error={error} />
