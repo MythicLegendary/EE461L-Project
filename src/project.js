@@ -102,9 +102,6 @@ function Project_Board(){
             <GetProject/>
          
          <p> Server response for creating a project is: {serverResponse} </p>
-         <p> New name: {project_name} </p>
-         <p> New description: {project_description} </p>
-         <p> New ID: {project_id} </p>
 
 
 
@@ -147,6 +144,9 @@ function GetProject()
     let projectid = responseJson['projectid'];
     let des = responseJson['description'];
     setServerResponse("\nName: " + name + " \nProject id: " + projectid + " \nDescription: " + des);
+
+     currentProjectID = projectid;
+     console.log(currentProjectID)
   }
   return(
     <>
