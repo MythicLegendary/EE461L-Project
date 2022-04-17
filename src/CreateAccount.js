@@ -11,8 +11,7 @@ function CreateAccount() {
   const [serverResponse, setServerResponse] = useState("No Response yet");
 
 
-  async function sendCredentials(details)
-  {
+  async function sendCredentials(details) {
     let username = details[Object.keys(details)[0]]
     let password = details[Object.keys(details)[1]]
     let credentials = username + "-" + password;
@@ -21,29 +20,59 @@ function CreateAccount() {
     console.log("The eneterd password: " + password);
     // Use fetch protocol to send the data to the backend
     let dict = {
-      method : "POST",
-      body : JSON.stringify({
+      method: "POST",
+      body: JSON.stringify({
         userid: username,
         password: password
       })
     };
-    let res = await fetch("/createuser" , dict);
+    let res = await fetch("/createuser", dict);
     let responseJson = await res.json();
-    
-    if(responseJson['errorcode'] == 0)
-    {
+
+    if (responseJson['errorcode'] == 0) {
       setServerResponse("Added User!");
-      setError("Added User!")
+      setError("Added User!");
     }
-    else{
-        
+    else {
+
       setServerResponse("Did not add new user.");
-      setError("Did not add new user.")
+      setError("Did not add new user.");
     }
   }
 
   const Login = details => {
-    sendCredentials(details);
+    let checkname = details[Object.keys(details)[0]];
+    let checkpass = details[Object.keys(details)[1]];
+    let check = 0;
+    var regularExpression = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/;
+
+    if (checkname.length == 0) {
+      setError("Username and Password must be greater than 0")
+      check = 1;
+    } else {
+      for (let i = 0; i < checkname.length; i++) {
+        if (checkname.charAt(i) == ' ' || checkname.charAt(i) == "!") {
+          setError("Please use valid characters");
+          check = 1;
+        }
+      }
+    }
+    if (checkpass.length == 0) {
+      setError("Username and Password must be greater than 0")
+      check = 1;
+    } else {
+      for (let i = 0; i < checkpass.length; i++) {
+        if (checkpass.charAt(i) == ' ' || checkpass.charAt(i) == "!") {
+          setError("Please use valid characters");
+          check = 1;
+        }
+      }
+    }
+    if(check != 1){
+      sendCredentials(details);
+    }
+    
+    
   }
 
   const Logout = () => {
@@ -53,7 +82,7 @@ function CreateAccount() {
 
 
   return (
-    <div className= "CreateAccount">
+    <div className="CreateAccount">
       {(user.password != "") ? (
         <div className="welcome">
           <h2>Welcome, <span>{user.name}</span></h2>
@@ -62,7 +91,7 @@ function CreateAccount() {
       ) : (
         <AccountForm Login={Login} error={error} />
       )}
-      
+
 
     </div>
   );
