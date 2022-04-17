@@ -9,10 +9,14 @@ import Database
 from flask import Flask, jsonify, redirect, url_for, request, render_template
 import os
 import json
+import Datasets
 
 # Change static_folder when not testing
 app = Flask(__name__, static_folder='./build/', static_url_path='/')
+# Global Database Object
 db = Database.DatabaseImpl()
+# Global Dataset access
+Data = Datasets.Dataset() 
 #verifies that the username and password are valid, retrieved from the request form. If successful returns 0.
 @app.route("/")
 def index():
@@ -21,6 +25,38 @@ def index():
 @app.errorhandler(404)
 def not_found(e):
         return app.send_static_file('index.html')
+
+# this function returns meta data corresponding to the number given
+@app.route("/metadataRequest", methods = ["POST"])
+def getMetadata():
+    myrequest = request.get_json(force = True)
+    datasetNum = -1
+    try:
+        datasetNum = int(myrequest['datasetNum'])
+    except ValueError:
+        return {'errorcode' : -1}
+    # get the metadata dictionary from the dataset backend
+    metadata = {}
+    if datasetNum == 1:
+        metadata = Data.getFirst()
+        metadata['errorcode'] = 0
+    elif datasetNum == 2:
+        metadata = Data.getSecond()
+        metadata['errorcode'] = 0
+    elif datasetNum == 3:
+        metadata = Data.getThird()
+        metadata['errorcode'] = 0
+    elif datasetNum == 4:
+        metadata = Data.getFourth()
+        metadata['errorcode'] = 0
+    elif datasetNum == 5:
+        metadata = Data.getFifth()
+        metadata['errorcode'] = 0
+    else:
+        metadata['errorcode'] = -1
+    print(metadata)
+    return metadata
+    
 
 @app.route("/verifyuser", methods = ["POST"])
 def verifyuser():
@@ -109,7 +145,16 @@ def gethardwareset():
     myrequest = request.get_json(force=True)
     name = myrequest['name']
     hardwareSet = db.getHardwareSet(name)
-    return jsonify(hardwareSet)
+    if (hardwareSet != None):
+        return {"name": hardwareSet["name"],
+                "capacity": hardwareSet["capacity"],
+                "availability": hardwareSet["availability"]
+                }
+    else:
+        return {"name": "Invalid hardware",
+                "capacity": -1,
+                "availability": -1
+                }
 
     
 # This method allows the client to create a project. It takes a name, description, and projectid from the form, and creates the project in the database. If successful returns 0.
@@ -129,7 +174,11 @@ def getproject():
     myrequest = request.get_json(force=True)
     name = myrequest['id']
     project = db.getProject(name)
-    return jsonify(project)
+    if project == None:
+        return {'errorcode' : -1}
+    new_project = {'errorcode' : 0, 'projectid' : project['projectid'], 
+    'description' : project['description'], 'name' : project['name'], 'hardware' : project['hardware']}
+    return (new_project)
 
 # At this URL, flask will pass a list containing dictionaries with all current projects,
 # names, availability, and capacity. This url can therefore be used to have a dynamically updating page with the hardware on it. This list is jsonified when returned.
@@ -161,6 +210,7 @@ def hardwareToProject():
     inout = myrequest['inout']
     verify = db.hardwareToProject(hardwareName, projectid, qty, inout)
     return {'errorcode' : verify}
+
 
 # This method closes the database. It could be ideally implemented with a button that closes the user session gracefully.
 @app.route("/close")
