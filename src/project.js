@@ -14,7 +14,6 @@ function Project_Board(){
    const name_field = useRef();
    const description_field = useRef();
    const id_field = useRef();
-   const joinID_field = useRef();
 
    /*
     * Function to update the current state of name, id and description
@@ -137,7 +136,7 @@ function GetProject()
     let responseJson = await res.json();
     if(responseJson['errorcode'] != 0)
     {
-      setServerResponse("Fialure in retreival");
+      setServerResponse("Error: Unable to join project");
       return;
     }
     let name = responseJson['name'];
@@ -164,59 +163,6 @@ function GetProject()
     </>
   );
 }
-/*
- *
-         <button onClick = {() => createProject()}> Create new project </button>
-function joinProject(){
-
-   const [serverResponse, setServerResponse] = useState("No reponse yet");
-   const joinID_field = useRef();
-   async function getProject(){
-      
-      let join_ID = joinID_field.current.value;
-
-      let postDict = {
-         method: "POST",
-         body: JSON.stringify({
-            id: join_ID
-         })
-      };
-
-      let res = await fetch("/getProject", postDict);
-      let responseJson = await res.json();
-
-      console.log(responseJson)
-
-      if(responseJson['errorcode'] != 0)
-          {
-            setServerResponse("Fialure in retreival");
-            return;
-          }
-          let name = responseJson['name'];
-          let projectid = responseJson['projectid'];
-          let des = responseJson['description'];
-          setServerResponse("The name: " + name + " The project id: " + projectid + " THe description: " + des);
-
-   }
-
-      return (
-
-         <>
-            <form>
-
-               <label> Enter Project ID of project to join: 
-                  <input ref = {joinID_field} type = "text" placeholder = "Enter a project ID" />
-               </label>
-            
-            <button onClick = {() => getProject()}> Join a project </button>
-            <p> Server response: {serverResponse} </p>
-            </form>
-
-         </>
-      )
-
-}
-*/
 class Project extends React.Component{
    constructor(props){
       super (props);
