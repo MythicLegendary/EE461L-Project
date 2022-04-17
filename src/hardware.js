@@ -104,6 +104,7 @@ export default Hardware;
 
 function GetHardwareButton1(){	
    const requestfield1 = useRef();
+   const [getStatus1, setGetStatus1] = useState(2);
 
 	async function getHardwareFrom1(){
 		let toget1 = requestfield1.current.value;
@@ -124,8 +125,13 @@ function GetHardwareButton1(){
 		let responseJson = await res.json();
 
       console.log(responseJson)
-
-
+      
+      if (responseJson["errorcode"] == 0){
+         setGetStatus1("Successfully requested hardware from hardware set 1.")
+      }
+      else {
+         setGetStatus1("Error in trying to return hardware to hardware set 1.")
+      }
       
 		
 	}
@@ -138,6 +144,7 @@ function GetHardwareButton1(){
             <button onClick = { () => getHardwareFrom1()}>
                Checkout hardware 
             </button>
+            <p> Server Response: {getStatus1} </p>
          </div>
       </>
    ) 
@@ -145,6 +152,7 @@ function GetHardwareButton1(){
 }
 function GetHardwareButton2(){
    const requestfield2 = useRef();
+   const [getStatus2, setGetStatus2] = useState(2);
 
 	async function getHardwareFrom2(){
 		let toget2 = requestfield2.current.value;
@@ -161,6 +169,13 @@ function GetHardwareButton2(){
 		
 		let res = await fetch("/hardwareToProject" , dict);
 		let responseJson = await res.json();
+
+      if (responseJson ["errorcode"] == 0){
+         setGetStatus2("Successfully requested hardware from hardware set 2.")
+      }
+      else {
+         setGetStatus2("Error in trying to return hardware to hardware set 2.")
+      }
 	}
 	
    return (
@@ -171,6 +186,7 @@ function GetHardwareButton2(){
             <button onClick = { () => getHardwareFrom2()}>
                Checkout hardware 
             </button>
+            <p> Server response: {getStatus2} </p>
          </div>
       </>
    )
@@ -178,6 +194,7 @@ function GetHardwareButton2(){
 
 function ReturnHardwareButton1(){
    const returnfield1 = useRef();
+   const [returnStatus1, setReturnStatus1] = useState(2);
 
    async function returnHardwareTo1(){
       let return1 = returnfield1.current.value;
@@ -194,6 +211,13 @@ function ReturnHardwareButton1(){
 
       let res = await fetch("/hardwareToProject", dict);
       let responseJson = await res.json();
+      console.log(responseJson)
+      if (responseJson["errorcode"] == 0){
+         setReturnStatus1("Successfully returned hardware to hardware set 1.")
+      }
+      else {
+         setReturnStatus1("Error in trying to return hardware to hardware set 1.")
+      }
    }
 
    return (
@@ -202,6 +226,7 @@ function ReturnHardwareButton1(){
          <input ref = {returnfield1} type="number" placeholder="Enter an amount"></input>
          <br></br>
          <button onClick = { () => returnHardwareTo1() }> Return hardware </button>
+         <p> Server Response: {returnStatus1} </p>
       </>
    )	
 }
@@ -209,6 +234,7 @@ function ReturnHardwareButton1(){
 
 function ReturnHardwareButton2(){
    const returnfield2 = useRef();
+   const [returnStatus2, setReturnStatus2] = useState(2);
 
    async function returnHardwareTo2(){
       let return2 = returnfield2.current.value;
@@ -225,6 +251,12 @@ function ReturnHardwareButton2(){
 
       let res = await fetch("/hardwareToProject", dict);
       let responseJson = await res.json();
+      if (responseJson["errorcode"] == 0){
+         setReturnStatus2("Successfully returned hardware to hardware set 2.")
+      }
+      else {
+         setReturnStatus2("Error in trying to return hardware to hardware set 2.")
+      }
    }
 
    return (
@@ -233,6 +265,7 @@ function ReturnHardwareButton2(){
          <input ref = {returnfield2} type="number" placeholder="Enter an amount"></input>
          <br></br>
          <button onClick = { () => returnHardwareTo2() }> Return hardware </button>
+         <p> Server Response: {returnStatus2} </p>
          
       </>
    )	
