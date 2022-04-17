@@ -1,68 +1,82 @@
+import { Home } from '@mui/icons-material';
 import React, { useState } from 'react';
 import LoginForm from './components/LoginForm';
+import Logged from './Logged';
+import HomeScreen from './HomeScreen'
+import {Link} from "react-router-dom";
+
 
 function LoginPortal() {
 
-const adminUser = {
-  email: "admin@admin.com",
-  password: "admin123"
-}
+  const adminUser = {
+    email: "admin@admin.com",
+    password: "admin123"
+  }
 
-const [user, setUser] = useState({name: "", email: ""});
-const [error, setError] = useState("");
-const [serverResponse, setServerResponse] = useState("No Response yet");
+  const [user, setUser] = useState({ name: "", password: "" });
+  const [error, setError] = useState("");
+  const [serverResponse, setServerResponse] = useState("No Response yet");
 
-  async function sendCredentials(details){
-      let username = details.username;
-      let password = details.password;
-      let email = details.email;
 
-      // Fetch protocol
-       let dict = {
-         method : "POST",
-         body : JSON.stringify({
-           userid: username,
-           password: password
-         })
-       };
-       let res = await fetch("/verifyuser" , dict);
-       let responseJson = await res.json();
-     console.log(responseJson);
+  async function sendCredentials(details) {
+    let username = details[Object.keys(details)[0]]
+    let password = details[Object.keys(details)[1]]
+    console.log(username)
+    console.log(password)
+    
+    // Fetch protocol
+    let dict = {
+      method: "POST",
+      body: JSON.stringify({
+        userid: username,
+        password: password
+      })
+    };
 
-     if(responseJson['valid']){
-       console.log("Logged in")
-       setUser({
-         name: details.name,
-         email: details.email
-       });
-       setServerResponse("User was verified");
-     }else{
-       console.log("Details do not match")
-       setError("Details do not match")
-       setServerResponse("User was not verified");
-     }
-  }  
-const Login = details => {
-  console.log(details);
-   sendCredentials(details);
-}
+    let res = await fetch("/verifyuser", dict);
+    let responseJson = await res.json();
+    console.log(responseJson);
 
-const Logout = () => {
-  setUser({name: "", email: ""});
-}
+    if (responseJson['valid']) {
+      console.log("Logged in")
+      setUser({
+        name: username,
+        password: password
+      });
+      Logged.value = 1;
+      Logged.userName = username;
+      Logged.password = password;
+      setServerResponse("User was verified");
+      
+    } else {
+      console.log("Details do not match")
+      setError("Details do not match")
+      setServerResponse("User was not verified");
+    }
+  }
+  const Login = details => {
+    sendCredentials(details);
+  }
+
+  const Logout = () => {
+    setUser({ name: "", password: "" });
+    Logged.value = 0;
+  }
 
 
 
   return (
     <div className="LoginPortal">
-     {(user.email != "") ? (
-       <div className="welcome">
-         <h2>Welcome, <span>{user.name}</span></h2>
-         <button onClick={Logout}>Logout</button>
-         </div>
-     ) : ( 
-       <LoginForm Login={Login} error={error}/>
-     )}
+      {(user.password != "") ? (
+        <div className="welcome">
+          <h1>Welcome, {Logged.userName}!</h1>
+          <Link to = "/"> Home </Link>  
+        </div>
+      ) : (
+        <LoginForm Login={Login} error={error} />
+      )}
+      
+
     </div>
   );
 }

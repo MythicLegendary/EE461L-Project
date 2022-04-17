@@ -12,8 +12,7 @@ import json
 import Datasets
 
 # Change static_folder when not testing
-app = Flask(__name__, static_folder='./flask-tester-app/build/', static_url_path='/')
-# Global Database Object
+app = Flask(__name__, static_folder='./build/', static_url_path='/')
 db = Database.DatabaseImpl()
 # Global Dataset access
 Data = Datasets.Dataset() 
