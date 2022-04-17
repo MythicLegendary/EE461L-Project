@@ -497,10 +497,14 @@ function GetProject()
     };
     let res = await fetch("/getProject" , dict);
     let responseJson = await res.json();
-
+    if(responseJson['errorcode'] != 0)
+    {
+      setServerResponse("Fialure in retreival");
+      return;
+    }
     let name = responseJson['name'];
-    let projectid = responseJson["projectid"];
-    let des = responseJson["description"];
+    let projectid = responseJson['projectid'];
+    let des = responseJson['description'];
     setServerResponse("The name: " + name + " The project id: " + projectid + " THe description: " + des);
   }
   return(
@@ -658,7 +662,50 @@ function DisplayMetaData()
     </>
   );
 }
+function GetHW()
+{
+  const [serverResponse, setServerResponse] = useState("No Response Yet");
+  const nameField = useRef();
 
+  async function requestMetaData()
+  {
+    let name = nameField.current.value;
+    console.log("The hwset name requested was: " + name);
+    /* Create the HTTP request dict*/
+    let dict = {
+      method : "POST",
+      body : JSON.stringify({
+        name : name
+      })
+    };
+    let res = await fetch("/getHardwareSet" , dict);
+    let responseJson = await res.json();
+
+    /* If the errorcode signal failure, print nothing*/
+    if(responseJson['errorcode'] != 0)
+    {
+      setServerResponse("Retrieval Failure");
+      return;
+    }
+    console.log(responseJson);
+    let response = "Name: " + responseJson['name'] + " Capacity: " + responseJson['capacity'] + " Avail: " + responseJson["availability"];
+    setServerResponse(response);
+  }
+  return(
+    <>
+      <h2> Get hardware set data</h2>
+      <div>
+          <h3>Enter the name of the hardware set you want data from</h3>
+          <input ref = {nameField} type = "text" placeholder = "Name of the hwset" size = "26"></input>
+        </div>
+        <div>
+          <button onClick = {() => requestMetaData()}>Enter</button>
+      </div>
+      <label>{serverResponse}</label>
+      
+    </>
+  );
+}
 
 function App() {
   return (
@@ -670,10 +717,12 @@ function App() {
       <RemoveUsers/>
       <ValidateUsers/>
       <AddHW/>
+      <GetHW/>
       <RequestResources/>
       <ReturnResources/>
       <RemoveHW/>
       <CreateProject/>
+      <GetProject/>
       <RemoveProject/>
       <CheckoutToProject/>
       <DisplayMetaData/>

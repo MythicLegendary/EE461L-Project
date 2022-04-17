@@ -145,7 +145,11 @@ def gethardwareset():
     myrequest = request.get_json(force=True)
     name = myrequest['name']
     hardwareSet = db.getHardwareSet(name)
-    return jsonify(hardwareSet)
+    if hardwareSet == None:
+        return {'errorcode' : -1}
+    
+    return { 'errorcode' : 0, 'name' : hardwareSet['name'], 
+    'capacity' : hardwareSet['capacity'], 'availability' : hardwareSet['availability']}
 
     
 # This method allows the client to create a project. It takes a name, description, and projectid from the form, and creates the project in the database. If successful returns 0.
@@ -165,7 +169,12 @@ def getproject():
     myrequest = request.get_json(force=True)
     name = myrequest['id']
     project = db.getProject(name)
-    return jsonify(project)
+    if project == None:
+        return {'errorcode' : -1}
+    return {'errorcode' : 0, 'projectid' : project['projectid'], 
+    'description' : project['description'], 'name' : project['name'], 'hardware' : project['hardware']}
+    
+    
 
 # At this URL, flask will pass a list containing dictionaries with all current projects,
 # names, availability, and capacity. This url can therefore be used to have a dynamically updating page with the hardware on it. This list is jsonified when returned.
