@@ -67,19 +67,21 @@ function Hardware(){
          <p> Currently joined to project with ID: {currentProjectID} </p>
          <p> Hardware allocated to current project: {projectHardware}</p>
          
+         <button onClick = { () => getHardwareUpdate()}>Refresh values</button>
          
          <h3> HWSet1 </h3>
          <p> Availability: {Hardware1}</p>
          <p> Capacity: {Capacity1} </p>
-         <HardwareButton1/>
+         <GetHardwareButton1/>
+         <ReturnHardwareButton1/>
          
          <h3> HWSet2 </h3>
          <p> Availability: {Hardware2}</p>
          <p> Capacity: {Capacity2} </p>
-         <HardwareButton2/>
+         <GetHardwareButton2/>
+         <ReturnHardwareButton2/>
          
          <br></br>
-         <button onClick = { () => getHardwareUpdate()}>Refresh</button>
       
          <nav>
             <li>
@@ -100,7 +102,7 @@ export default Hardware;
 
 
 
-function HardwareButton1(){	
+function GetHardwareButton1(){	
    const requestfield1 = useRef();
 
 	async function getHardwareFrom1(){
@@ -130,16 +132,18 @@ function HardwareButton1(){
 	
    return(   
       <>
-         <p> Get Hardware from HWSet1 </p>
+         <label> Get Hardware from HWSet1 </label>
          <input ref = {requestfield1} type="number" placeholder={"Enter request"}></input>
          <div> 
-            <button onClick = { () => getHardwareFrom1()}>Submit</button>
+            <button onClick = { () => getHardwareFrom1()}>
+               Checkout hardware 
+            </button>
          </div>
       </>
    ) 
 	
 }
-function HardwareButton2(){
+function GetHardwareButton2(){
    const requestfield2 = useRef();
 
 	async function getHardwareFrom2(){
@@ -161,18 +165,75 @@ function HardwareButton2(){
 	
    return (
       <>
-         <p> Get Hardware from HWSet2 </p>
+         <label> Get Hardware from HWSet2 </label>
          <input ref = {requestfield2} type="number" placeholder={"Enter request"}></input>
          <div> 
             <button onClick = { () => getHardwareFrom2()}>
-               Checkout hardware from set 2
+               Checkout hardware 
             </button>
          </div>
       </>
    )
 }
 
-function updateHardwareDisplay(){
+function ReturnHardwareButton1(){
+   const returnfield1 = useRef();
 
-	
+   async function returnHardwareTo1(){
+      let return1 = returnfield1.current.value;
+
+      let dict = {
+         method: "POST",
+         body: JSON.stringify({
+            hardwareName: "hwset1",
+            qty: return1,
+            projectid: currentProjectID,
+            inout: "checkin"
+         })
+      };
+
+      let res = await fetch("/hardwareToProject", dict);
+      let responseJson = await res.json();
+   }
+
+   return (
+      <>
+         <label>  Enter amount of hardware to return: </label>
+         <input ref = {returnfield1} type="number" placeholder="Enter an amount"></input>
+         <br></br>
+         <button onClick = { () => returnHardwareTo1() }> Return hardware </button>
+      </>
+   )	
+}
+
+
+function ReturnHardwareButton2(){
+   const returnfield2 = useRef();
+
+   async function returnHardwareTo2(){
+      let return2 = returnfield2.current.value;
+
+      let dict = {
+         method: "POST",
+         body: JSON.stringify({
+            hardwareName: "hwset2",
+            qty: return2,
+            projectid: currentProjectID,
+            inout: "checkin"
+         })
+      };
+
+      let res = await fetch("/hardwareToProject", dict);
+      let responseJson = await res.json();
+   }
+
+   return (
+      <>
+         <label>  Enter amount of hardware to return: </label>
+         <input ref = {returnfield2} type="number" placeholder="Enter an amount"></input>
+         <br></br>
+         <button onClick = { () => returnHardwareTo2() }> Return hardware </button>
+         
+      </>
+   )	
 }
